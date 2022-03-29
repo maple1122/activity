@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<suite name="activityTest" parallel="false">
+    <test name="投票管理">
+        <classes>
+            <class name="vote.AddVoteTest"></class>
+            <class name="vote.VoteManage"></class>
+        </classes>
+    </test>
+</suite>

@@ -245,18 +245,6 @@ public class CommonMethod {
         }
     }
 
-//    //校验元素有某个属性
-//    public static boolean isAttribtuePresent(WebElement element, String attribute) {
-//        Boolean result = false;
-//        try {
-//            String value = element.getAttribute(attribute);
-//            if (value != null){
-//                result = true;
-//            }
-//        } catch (Exception e) {}
-//        return result;
-//    }
-
     //判断是否有alert
     public static boolean isAlert(WebDriver driver) {
         try {
@@ -276,4 +264,19 @@ public class CommonMethod {
         return text;
     }
 
+    //拖动元素到指定元素
+    public static void moveWebElement(WebDriver driver,WebElement draggable,WebElement target) throws InterruptedException {
+        final String java_script =//执行元素拖拽的js。不懂，网上扒下来的~
+                "var src=arguments[0],tgt=arguments[1];var dataTransfer={dropEffe" +
+                        "ct:'',effectAllowed:'all',files:[],items:{},types:[],setData:fun" +
+                        "ction(format,data){this.items[format]=data;this.types.append(for" +
+                        "mat);},getData:function(format){return this.items[format];},clea" +
+                        "rData:function(format){}};var emit=function(event,target){var ev" +
+                        "t=document.createEvent('Event');evt.initEvent(event,true,false);" +
+                        "evt.dataTransfer=dataTransfer;target.dispatchEvent(evt);};emit('" +
+                        "dragstart',src);emit('dragenter',tgt);emit('dragover',tgt);emit(" +
+                        "'drop',tgt);emit('dragend',src);";
+        ((JavascriptExecutor) driver).executeScript(java_script, draggable, target);//执行拖拽js
+        Thread.sleep(1000);
+    }
 }

@@ -35,9 +35,9 @@ public class LoginPortal {
     public static void login(String username, String password) throws InterruptedException {
         driver.get(domain + "/portal/login");
         //校验是否需要登录
-        if (CommonMethod.isJudgingElement(driver, By.className("loginBtn"))) {
-            driver.findElement(By.name("username")).sendKeys(username);
-            driver.findElement(By.name("password")).sendKeys(password);
+        if (CommonMethod.isJudgingElement(driver, By.className("loginBtn"))) {//是否是登录页
+            driver.findElement(By.name("username")).sendKeys(username);//录入用户名
+            driver.findElement(By.name("password")).sendKeys(password);//录入密码
 
             //手动拖动滑块
             Actions action = new Actions(driver);
@@ -48,7 +48,7 @@ public class LoginPortal {
             action.release();
 
             Thread.sleep(2000);
-            driver.findElement(By.className("loginBtn")).click();
+            driver.findElement(By.className("loginBtn")).click();//点击登录
             Thread.sleep(3000);
         }
     }

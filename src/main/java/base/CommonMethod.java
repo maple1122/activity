@@ -121,17 +121,16 @@ public class CommonMethod {
 
     //签发到测试频道
     public static Boolean getPublishChannel(WebDriver driver, String channelName) throws InterruptedException {
-        WebElement channel1, channel2, channel3;
         Boolean selected = false;
-        driver.findElement(By.cssSelector("input.layui-input.myKeyword2")).sendKeys(channelName);
+        driver.findElement(By.cssSelector("input.layui-input.myKeyword2")).sendKeys(channelName);//录入搜索目标签发频道
         Thread.sleep(200);
-        driver.findElement(By.cssSelector("button.layui-btn.layui-btn-primary.search2")).click();
+        driver.findElement(By.cssSelector("button.layui-btn.layui-btn-primary.search2")).click();//搜索
         Thread.sleep(500);
         List<WebElement> list1, list2;
-        list1 = driver.findElements(By.xpath("//div[@id='xtree']/div/div"));
+        list1 = driver.findElements(By.xpath("//div[@id='xtree']/div/div"));//一级目录
         for (int i = 0; i < list1.size(); i++) {
             list1.get(i).getAttribute("style").contains("block");
-            list2 = list1.get(i).findElements(By.xpath("div"));
+            list2 = list1.get(i).findElements(By.xpath("div"));//二级目录
             for (int j = 0; j < list2.size(); j++) {
                 if (list2.get(j).getAttribute("style").contains("block")) {
                     list2.get(j).findElement(By.xpath("div/i")).click();
@@ -265,17 +264,29 @@ public class CommonMethod {
     }
 
     //拖动元素到指定元素
-    public static void moveWebElement(WebDriver driver,WebElement draggable,WebElement target) throws InterruptedException {
+    public static void moveWebElement(WebDriver driver, WebElement draggable, WebElement target) throws InterruptedException {
         final String java_script =//执行元素拖拽的js。不懂，网上扒下来的~
-                "var src=arguments[0],tgt=arguments[1];var dataTransfer={dropEffe" +
-                        "ct:'',effectAllowed:'all',files:[],items:{},types:[],setData:fun" +
-                        "ction(format,data){this.items[format]=data;this.types.append(for" +
-                        "mat);},getData:function(format){return this.items[format];},clea" +
-                        "rData:function(format){}};var emit=function(event,target){var ev" +
-                        "t=document.createEvent('Event');evt.initEvent(event,true,false);" +
-                        "evt.dataTransfer=dataTransfer;target.dispatchEvent(evt);};emit('" +
-                        "dragstart',src);emit('dragenter',tgt);emit('dragover',tgt);emit(" +
-                        "'drop',tgt);emit('dragend',src);";
+//                "var src=arguments[0],tgt=arguments[1];var dataTransfer={dropEffe" +
+//                        "ct:'',effectAllowed:'all',files:[],items:{},types:[],setData:fun" +
+//                        "ction(format,data){this.items[format]=data;this.types.append(for" +
+//                        "mat);},getData:function(format){return this.items[format];},clea" +
+//                        "rData:function(format){}};var emit=function(event,target){var ev" +
+//                        "t=document.createEvent('Event');evt.initEvent(event,true,false);" +
+//                        "evt.dataTransfer=dataTransfer;target.dispatchEvent(evt);};emit('" +
+//                        "mousedown',src);emit('dragstart',src);emit('dragenter',tgt);emi" +
+//                        "t('dragover',tgt);emit('drop',tgt);emit('dragend',src);emit('mouseup',src);";
+        "var src=arguments[0],tgt=arguments[1];var dataTransfer={dropEffe" +
+                "ct:'',effectAllowed:'all',files:[],items:{},types:[],setData:fun" +
+                "ction(format,data){this.items[format]=data;this.types.append(for" +
+                "mat);},getData:function(format){return this.items[format];},clea" +
+                "rData:function(format){}};var emit=function(event,target){var ev" +
+                "t=document.createEvent('Event');evt.initEvent(event,true,false);" +
+                "evt.dataTransfer=dataTransfer;target.dispatchEvent(evt);};emit('" +
+                "dragstart',src);emit('dragenter',tgt);emit('dragover',tgt);emit(" +
+                "'drop',tgt);emit('dragend',src);";
+//        Actions actions1 = new Actions(driver);
+//        actions1.clickAndHold(draggable).perform();
+//        System.out.println("draggable:"+draggable.getAttribute("draggable"));
         ((JavascriptExecutor) driver).executeScript(java_script, draggable, target);//执行拖拽js
         Thread.sleep(1000);
     }

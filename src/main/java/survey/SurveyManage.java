@@ -3,12 +3,10 @@ package survey;
 import base.CommonMethod;
 import base.LoginPortal;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import java.sql.Driver;
 import java.util.List;
 
 /**
@@ -21,12 +19,15 @@ public class SurveyManage extends LoginPortal {
 
     //报名下线
     public static void offline() throws InterruptedException {
-        search(2);
-        if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='referrals-btn']")).click();
-            Thread.sleep(200);
-            driver.findElement(By.className("layui-layer-btn0")).click();
-            Thread.sleep(1000);
+        search(2);//搜索已发布的数据
+        if (CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {//校验是否有数据
+            List<WebElement> survey = driver.findElements(By.xpath("//div[@class='list infinite-list']/div"));//数据列表
+            for (int i = survey.size(); i > 0; i--) {
+                driver.findElement(By.xpath("//div[@class='list infinite-list']/div[" + i + "]/div[@class='describe']/div[@class='bottomDescribe']/div[@class='operation']/span[4]")).click();//点击下线
+                Thread.sleep(200);
+                driver.findElement(By.cssSelector("button.el-button.el-button--default.el-button--small.el-button--primary")).click();//点击确定
+                Thread.sleep(2000);
+            }
             System.out.println("~~~ offline()，报名下线，执行成功 ~~~");
         } else System.out.println("没有可下线的自动化测试报名数据");
         Thread.sleep(3000);
@@ -36,15 +37,14 @@ public class SurveyManage extends LoginPortal {
     public static void online() throws InterruptedException {
         Boolean canOnline = true;
         search(1);//搜索未发布的测试数据
-        if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
+        if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {//校验是否有数据
             search(3);//搜索已下线的测试数据
-            if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li")))
+            if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div")))//校验是否有数据
                 canOnline = false;
         }
-        if (canOnline) {
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='publish-btn']")).click();
+        if (canOnline) {//可以发布
+            driver.findElement(By.xpath("//div[@class='list infinite-list']/div[1]/div[@class='describe']/div[@class='bottomDescribe']/div[@class='operation']/span[1]")).click();//点击发布
             Thread.sleep(200);
-            driver.findElement(By.className("layui-layer-btn0")).click();
             System.out.println("~~~ online()，报名发布，执行成功 ~~~");
         } else System.out.println("没有已下线的自动化测试报名数据");
         Thread.sleep(3000);
@@ -52,16 +52,19 @@ public class SurveyManage extends LoginPortal {
 
     //报名签发
     public static void publish() throws InterruptedException {
-        search(2);
-        if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='sign-btn']")).click();
-            Thread.sleep(500);
-            Boolean selected = CommonMethod.getPublishChannel(driver, "测试test");
-            if (selected) {
-                driver.findElement(By.className("sign-affirm")).click();
+        search(2);//搜索已发布的数据
+        if (CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {//校验是否有数据
+            driver.findElement(By.xpath("//div[@class='list infinite-list']/div[1]/div[@class='describe']/div[@class='bottomDescribe']/div[@class='operation']/span[3]")).click();//点击签发
+            Thread.sleep(1000);
+            driver.findElement(By.xpath("//div[@class='checkPeople']/div[2]/input")).sendKeys("测试test");//搜索测试频道
+            Thread.sleep(1000);
+            if (driver.findElement(By.xpath("//div[@class='el-tree']/div[@class='el-tree-node is-expanded is-focusable']/div[@class='el-tree-node__children']/div[@class='el-tree-node is-expanded is-focusable']/div[@class='el-tree-node__children']/div[@class='el-tree-node is-expanded is-focusable']/div/div/label/span[2]")).getText().contains("测试test")) {//校验是否是测试频道
+                driver.findElement(By.xpath("//div[@class='el-tree']/div[@class='el-tree-node is-expanded is-focusable']/div[@class='el-tree-node__children']/div[@class='el-tree-node is-expanded is-focusable']/div[@class='el-tree-node__children']/div[@class='el-tree-node is-expanded is-focusable']/div/div/label/span[1]/span")).click();//选中测试频道
+                Thread.sleep(1000);
+                driver.findElement(By.cssSelector("div.footerBtn.trueBtn")).click();//点击确定
                 System.out.println("~~~ publish()，报名签发，执行成功 ~~~");
             } else {
-                driver.findElement(By.className("sign-cancel")).click();
+                driver.findElement(By.cssSelector("div.footerBtn.cancelBtn")).click();//点击取消
                 System.out.println("没找到签发频道");
             }
         } else System.out.println("没有可签发的自动化测试报名数据");
@@ -70,19 +73,9 @@ public class SurveyManage extends LoginPortal {
 
     //报名编辑
     public static void edit() throws InterruptedException {
-        Boolean canEdit = true;
         //获取可编辑的数据
         search(1);//搜索未发布的测试数据
-        if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {
-            search(3);//搜索已下线的测试数据
-            if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {
-                offline();//已发布的测试数据进行下线
-                search(3);//搜索已下线的数据
-                if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div")))
-                    canEdit = false;
-            }
-        }
-        if (canEdit) {
+        if (CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {//校验是否有数据
             Thread.sleep(200);
             List<WebElement> survey = driver.findElements(By.xpath("//div[@class='list infinite-list']/div"));//自动化测试数据列表
             Actions action = new Actions(driver);
@@ -123,24 +116,24 @@ public class SurveyManage extends LoginPortal {
         Boolean canDelete = true;
         //获取可编辑的数据
         search(1);//搜索未发布的测试数据
-        if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
+        if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {
             search(3);//搜索已下线的测试数据
-            if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
+            if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div"))) {
                 offline();//已发布的测试数据进行下线
                 search(3);//搜索已下线的数据
-                if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li")))
+                if (!CommonMethod.isJudgingElement(driver, By.xpath("//div[@class='list infinite-list']/div")))
                     canDelete = false;
             }
         }
         if (canDelete) {
-            List<WebElement> list = driver.findElements(By.xpath("//ul[@id='voteList']/li"));
-            for (int i = list.size(); i > 0; i--) {
+            List<WebElement> survey = driver.findElements(By.xpath("//div[@class='list infinite-list']/div"));//数据列表
+            for (int i = survey.size(); i > 0; i--) {
                 Actions actions = new Actions(driver);
-                actions.moveToElement(driver.findElement(By.xpath("//ul[@id='voteList']/li[" + i + "]/div[@class='vote-btns']/div[@class='edit-box']/a"))).perform();
+                actions.moveToElement(driver.findElement(By.xpath("//div[@class='list infinite-list']/div[" + i + "]/div[@class='describe']/div[@class='bottomDescribe']/div[2]/img"))).perform();//光标悬浮操作icon
                 Thread.sleep(200);
-                driver.findElement(By.xpath("//ul[@id='voteList']/li[" + i + "]/div[@class='vote-btns']/div[@class='edit-box']/ul/li[@class='delete-btn']")).click();
+                driver.findElement(By.xpath("//div[@class='list infinite-list']/div[" + i + "]/div[@class='describe']/div[@class='bottomDescribe']/div[2]/div/span[3]")).click();//点击删除
                 Thread.sleep(500);
-                driver.findElement(By.className("layui-layer-btn0")).click();
+                driver.findElement(By.cssSelector("button.el-button.el-button--default.el-button--small.el-button--primary")).click();//确定删除
                 Thread.sleep(2000);
             }
             System.out.println("~~~ delete()，报名删除，执行成功 ~~~");
@@ -150,12 +143,12 @@ public class SurveyManage extends LoginPortal {
 
     //报名搜索
     private static void search(int type) throws InterruptedException {
-        List<WebElement> liStatus = driver.findElements(By.xpath("//div[@class='time-filter']/span"));
-        if (type > 0 && type <= 3) liStatus.get(type).click();
+        List<WebElement> liStatus = driver.findElements(By.xpath("//div[@class='time-filter']/span"));//筛选状态列表
+        if (type > 0 && type <= 3) liStatus.get(type).click();//1、未发布；2、已发布；3、已下线
         Thread.sleep(1500);
-        driver.findElement(By.xpath("//div[@class='keyword-search']/input")).clear();
-        driver.findElement(By.xpath("//div[@class='keyword-search']/input")).sendKeys("autoTest");
-        driver.findElement(By.xpath("//div[@class='keyword-search']/button")).click();
+        driver.findElement(By.xpath("//div[@class='keyword-search']/input")).clear();//清空搜索框
+        driver.findElement(By.xpath("//div[@class='keyword-search']/input")).sendKeys("autoTest");//录入搜索关键词
+        driver.findElement(By.xpath("//div[@class='keyword-search']/button")).click();//点击搜索
         Thread.sleep(2000);
     }
 
@@ -170,7 +163,7 @@ public class SurveyManage extends LoginPortal {
                     Thread.sleep(2000);
                 } else break;
             }
-            if (!driver.findElement(By.xpath("//div[@class='listBox']/ul/li[@class='Item ItemActive']")).getText().contains("爱富县")) {
+            if (!driver.findElement(By.xpath("//ul[@class='listParent']/li[1]")).getText().contains("爱富县")) {
                 driver.findElement(By.className("communit-toggle")).click();
                 Thread.sleep(500);
                 List<WebElement> li = driver.findElements(By.xpath("//ul[@class='listParent']/li"));

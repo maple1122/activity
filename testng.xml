@@ -6,4 +6,16 @@
             <class name="vote.VoteManage"></class>
         </classes>
     </test>
+    <test name="报名管理">
+        <classes>
+            <class name="entry.AddEntryTest"></class>
+            <class name="entry.EntryManageTest"></class>
+        </classes>
+    </test>
+    <test name="问卷调查管理">
+        <classes>
+            <class name="survey.AddSurveyTest"></class>
+            <class name="survey.SurveyManageTest"></class>
+        </classes>
+    </test>
 </suite>

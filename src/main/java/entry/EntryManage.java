@@ -5,7 +5,6 @@ import base.LoginPortal;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
@@ -19,11 +18,11 @@ public class EntryManage extends LoginPortal {
 
     //报名下线
     public static void offline() throws InterruptedException {
-        search(2);
-        if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='referrals-btn']")).click();
+        search(2);//搜索已发布
+        if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {//校验是否有数据
+            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='referrals-btn']")).click();//点击下线
             Thread.sleep(200);
-            driver.findElement(By.className("layui-layer-btn0")).click();
+            driver.findElement(By.className("layui-layer-btn0")).click();//确定下线
             Thread.sleep(1000);
             System.out.println("~~~ offline()，报名下线，执行成功 ~~~");
         } else System.out.println("没有可下线的自动化测试报名数据");
@@ -34,15 +33,15 @@ public class EntryManage extends LoginPortal {
     public static void online() throws InterruptedException {
         Boolean canOnline = true;
         search(1);//搜索未发布的测试数据
-        if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
+        if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {//校验是否有数据
             search(3);//搜索已下线的测试数据
-            if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li")))
+            if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li")))//校验是否有数据
                 canOnline = false;
         }
         if (canOnline) {
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='publish-btn']")).click();
+            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='publish-btn']")).click();//点击发布
             Thread.sleep(200);
-            driver.findElement(By.className("layui-layer-btn0")).click();
+            driver.findElement(By.className("layui-layer-btn0")).click();//点击确定
             System.out.println("~~~ online()，报名发布，执行成功 ~~~");
         } else System.out.println("没有已下线的自动化测试报名数据");
         Thread.sleep(3000);
@@ -50,16 +49,16 @@ public class EntryManage extends LoginPortal {
 
     //报名签发
     public static void publish() throws InterruptedException {
-        search(2);
-        if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='sign-btn']")).click();
-            Thread.sleep(500);
-            Boolean selected = CommonMethod.getPublishChannel(driver, "测试test");
+        search(2);//搜索已发布的数据
+        if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {//校验是否有数据
+            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='vote-left']/a[@class='sign-btn']")).click();//点击签发
+            Thread.sleep(1000);
+            Boolean selected = CommonMethod.getPublishChannel(driver, "测试test");//搜索测试频道
             if (selected) {
-                driver.findElement(By.className("sign-affirm")).click();
+                driver.findElement(By.className("sign-affirm")).click();//点击确定
                 System.out.println("~~~ publish()，报名签发，执行成功 ~~~");
             } else {
-                driver.findElement(By.className("sign-cancel")).click();
+                driver.findElement(By.className("sign-cancel")).click();//点击取消
                 System.out.println("没找到签发频道");
             }
         } else System.out.println("没有可签发的自动化测试报名数据");
@@ -71,20 +70,20 @@ public class EntryManage extends LoginPortal {
         Boolean canEdit = true;
         //获取可编辑的数据
         search(1);//搜索未发布的测试数据
-        if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
+        if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {//校验是否有数据
             search(3);//搜索已下线的测试数据
-            if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {
+            if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li"))) {//校验是否有数据
                 offline();//已发布的测试数据进行下线
                 search(3);//搜索已下线的数据
-                if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li")))
+                if (!CommonMethod.isJudgingElement(driver, By.xpath("//ul[@id='voteList']/li")))//校验是否有数据
                     canEdit = false;
             }
         }
         if (canEdit) {
             Actions actions = new Actions(driver);
-            actions.moveToElement(driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='edit-box']/a"))).perform();
+            actions.moveToElement(driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='edit-box']/a"))).perform();//光标悬浮
             Thread.sleep(200);
-            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='edit-box']/ul/li[@class='edit-btn']")).click();
+            driver.findElement(By.xpath("//ul[@id='voteList']/li[1]/div[@class='vote-btns']/div[@class='edit-box']/ul/li[@class='edit-btn']")).click();//点击编辑
             Thread.sleep(1000);
             //编辑页进行编辑
             for (int i = 1; 1 < 20; i++) {
@@ -94,22 +93,31 @@ public class EntryManage extends LoginPortal {
                 }
             }
             Thread.sleep(500);
-            driver.findElement(By.name("title")).clear();
-            driver.findElement(By.name("title")).sendKeys("autoTest-edit报名-" + System.currentTimeMillis());
+            driver.findElement(By.name("title")).clear();//清空标题
+            driver.findElement(By.name("title")).sendKeys("autoTest-edit报名-" + System.currentTimeMillis());//编辑标题
             Thread.sleep(500);
-            driver.findElement(By.xpath("//div[@class='save-box']/button[1]")).click();
+            driver.findElement(By.xpath("//div[@class='save-box']/button[1]")).click();//点击保存
             Thread.sleep(2000);
 
-//            //编辑选项设置
-//            driver.findElement(By.xpath("//ul[@class='step-list']/li[3]")).click();
-//            Thread.sleep(1000);
-            //开始拖拽
-//            WebElement draggable = driver.findElement(By.xpath("//div[@id='controlList1']/div[1]"));
-//            WebElement target = driver.findElement(By.xpath("//div[@id='showMain']/div"));
-//            Actions action = new Actions(driver);
-//            action.dragAndDrop(draggable,target).build().perform();
-
-            driver.findElement(By.className("back-icon")).click();
+//            if (CommonMethod.isJudgingElement(driver, By.xpath("//ul[@class='step-list']/li[3]"))) {
+//                driver.findElement(By.xpath("//ul[@class='step-list']/li[3]")).click();
+//                Thread.sleep(500);
+////                if (CommonMethod.isJudgingElement(driver, By.xpath("//div[@id='showBox']/div[@class='no-show']"))) {
+////            编辑选项设置
+////                Actions actions1 = new Actions(driver);
+//                WebElement draggable, target;//拖拽元素及目标元素位置
+//                target = driver.findElement(By.xpath("//div[@class='show-box']"));//目标元素
+//                for (int i = 1; i < 4; i++) {
+//                    draggable = driver.findElement(By.xpath("//div[@id='controlBox']/div[1]/div[@id='controlList1']/div[" + i + "]"));//拖拽元素
+////                    System.out.println("draggable1:" + draggable.getAttribute("draggable"));
+////                    actions1.clickAndHold(draggable).perform();
+////                    System.out.println("draggable2:" + draggable.getAttribute("draggable"));
+//                    CommonMethod.moveWebElement(driver, draggable, target);//A拖动到B
+//                    Thread.sleep(1000);
+//                }
+//            }
+//            }
+            driver.findElement(By.className("back-icon")).click();//点击返回
             driver.switchTo().parentFrame();
             System.out.println("~~~ edit()，报名编辑，执行成功 ~~~");
         } else System.out.println("没有可编辑的自动化测试报名数据");
@@ -175,7 +183,6 @@ public class EntryManage extends LoginPortal {
                 Thread.sleep(500);
                 driver.findElement(By.linkText("爱富县")).click();
                 Thread.sleep(3000);
-
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

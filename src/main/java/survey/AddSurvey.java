@@ -5,7 +5,6 @@ import base.LoginPortal;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class AddSurvey extends LoginPortal {
                     Thread.sleep(2000);
                 } else break;
             }
-            if (!driver.findElement(By.xpath("//div[@class='listBox']/ul/li[@class='Item ItemActive']")).getText().contains("爱富县")) {
+            if (!driver.findElement(By.xpath("//ul[@class='listParent']/li[1]")).getText().contains("爱富县")) {
                 driver.findElement(By.className("communit-toggle")).click();
                 Thread.sleep(500);
                 List<WebElement> li = driver.findElements(By.xpath("//ul[@class='listParent']/li"));

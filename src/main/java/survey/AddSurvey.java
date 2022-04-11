@@ -70,12 +70,12 @@ public class AddSurvey extends LoginPortal {
                     Thread.sleep(2000);
                 } else break;
             }
-            if (!driver.findElement(By.xpath("//ul[@class='listParent']/li[1]")).getText().contains("爱富县")) {
+            if (!driver.findElement(By.xpath("//ul[@class='listParent']/li[1]")).getText().contains(siteName)) {
                 driver.findElement(By.className("communit-toggle")).click();
                 Thread.sleep(500);
                 List<WebElement> li = driver.findElements(By.xpath("//ul[@class='listParent']/li"));
                 for (int i = 0; i < li.size(); i++) {
-                    if (li.get(i).getText().contains("爱富县")) {
+                    if (li.get(i).getText().contains(siteName)) {
                         li.get(i).click();
                         break;
                     }

@@ -13,7 +13,10 @@ import org.openqa.selenium.interactions.Actions;
  */
 public class LoginPortal {
 
-    public static String domain = "http://app.test.pdmiryun.com";
+//    public static String domain = "http://app.test.pdmiryun.com";//测试环境域名
+    public static String domain = "http://app.pdmiryun.com";
+    //    public static String siteName="爱富县";//测试环境站点
+    public static String siteName = "人民媒体";
 
     static WebDriver driver = initDriver();
 
@@ -55,7 +58,7 @@ public class LoginPortal {
 
     //默认wf账号登录
     public static WebDriver login() throws InterruptedException {
-        login("wffx", "test1234");
+        login("wf", "test1234");
         return driver;
     }
 

@@ -14,30 +14,30 @@ import static org.testng.Assert.*;
  */
 public class SurveyManageTest {
 
-    @Test(priority = 4)//下线问卷
+    @Test(priority = 3)//下线问卷
     public void testOffline() throws InterruptedException {
         SurveyManage.offline();
     }
 
-    @Test(priority = 2)//发布问卷
+    @Test(priority = 1)//发布问卷
     public void testOnline() throws InterruptedException {
         SurveyManage.online();
     }
 
-    @Test(priority = 3)//签发问卷
+    @Test(priority = 2)//签发问卷
     public void testPublish() throws InterruptedException {
         SurveyManage.publish();
     }
 
-    @Test(priority = 1)//编辑问卷
+    @Test(priority = 4)//编辑问卷
     public void testEdit() throws InterruptedException {
         SurveyManage.edit();
     }
 
-    @Test(priority = 5)//删除问卷
-    public void testDelete() throws InterruptedException {
-        SurveyManage.delete();
-    }
+//    @Test(priority = 5)//删除问卷
+//    public void testDelete() throws InterruptedException {
+//        SurveyManage.delete();
+//    }
 
     @BeforeMethod
     public void testStart(Method method) {

@@ -34,10 +34,10 @@ public class EntryManageTest {
         EntryManage.edit();
     }
 
-    @Test(priority = 5)//删除报名
-    public void testDelete() throws InterruptedException {
-        EntryManage.delete();
-    }
+//    @Test(priority = 5)//删除报名
+//    public void testDelete() throws InterruptedException {
+//        EntryManage.delete();
+//    }
 
     @BeforeMethod
     public void testStart(Method method) {

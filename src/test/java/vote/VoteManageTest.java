@@ -34,10 +34,10 @@ public class VoteManageTest {
         VoteManage.edit();
     }
 
-    @Test(priority = 6)//删除投票
-    public void testDelete() throws InterruptedException {
-        VoteManage.delete();
-    }
+//    @Test(priority = 6)//删除投票
+//    public void testDelete() throws InterruptedException {
+//        VoteManage.delete();
+//    }
 
     @Test(priority = 5)//编辑投票结果
     public void testEditResult() throws InterruptedException {

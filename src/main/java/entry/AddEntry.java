@@ -17,10 +17,15 @@ public class AddEntry extends LoginPortal {
 
     //新建普通报名
     public static void addEntry() throws InterruptedException {
-        Actions actions = new Actions(driver);
-        actions.moveToElement(driver.findElement(By.xpath("//div[@class='add-box']/button"))).perform();//光标悬浮新建按钮
-        Thread.sleep(200);
-        driver.findElement(By.xpath("//ul[@id='addLayer']/li[1]")).click();//点击新建普通报名
+
+        //有普通报名和自定义报名
+        if (CommonMethod.isJudgingElement(driver, By.id("addLayer"))) {
+            Actions actions = new Actions(driver);
+            actions.moveToElement(driver.findElement(By.xpath("//div[@class='add-box']/button"))).perform();//光标悬浮新建按钮
+            Thread.sleep(200);
+            driver.findElement(By.xpath("//ul[@id='addLayer']/li[1]")).click();
+        }//点击新建普通报名
+        else driver.findElement(By.id("addEntry")).click();//仅有普通报名
         Thread.sleep(500);
         for (int i = 1; 1 < 20; i++) {
             if (CommonMethod.isJudgingElement(driver, By.id("layui-layer-iframe" + i))) {
@@ -86,7 +91,7 @@ public class AddEntry extends LoginPortal {
         WebElement draggable, target;//拖拽元素及目标元素位置
         target = driver.findElement(By.id("showBox"));//目标元素
         for (int i = 1; i < 4; i++) {
-            draggable = driver.findElement(By.xpath("//div[@id='controlBox']/div[1]/div[@id='controlList1']/div["+i+"]/div"));//拖拽元素
+            draggable = driver.findElement(By.xpath("//div[@id='controlBox']/div[1]/div[@id='controlList1']/div[" + i + "]/div"));//拖拽元素
             CommonMethod.moveWebElement(driver, draggable, target);//A拖动到B
             Thread.sleep(1000);
         }
@@ -100,7 +105,7 @@ public class AddEntry extends LoginPortal {
             for (int i = 0; i < 3; i++) {
                 if (!CommonMethod.isJudgingElement(driver, By.tagName("header"))) {
                     if (CommonMethod.isJudgingElement(driver, By.className("loginBtn"))) driver = login();
-                    driver.get(domain+"/entry/entry/list");
+                    driver.get(domain + "/entry/entry/list");
                     Thread.sleep(2000);
                 } else break;
             }

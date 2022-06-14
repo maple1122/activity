@@ -133,7 +133,7 @@ public class AddVote extends LoginPortal {
         driver.findElement(By.cssSelector("div.upload-btn.addimg.addimg-btn")).click();//点击设置封面图
         Thread.sleep(500);
         CommonMethod.getImg(driver);//在线资源库设置图片
-        Thread.sleep(500);
+        Thread.sleep(1000);
         driver.findElement(By.xpath("//div[@id='isGroupConfig']/div/div[2]/i")).click();//设置为多组投票
         Thread.sleep(500);
         driver.findElement(By.id("endtime")).click();//点击截止时间
